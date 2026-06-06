@@ -76,6 +76,12 @@ async def async_setup_entry(hass, entry, async_add_entities) -> None:
                 )
                 appliances.extend([HonNumber(hon, coordinator, appliance, description)])
 
+        _LOGGER.error(
+            "AW_SETTINGS_%s=%s",
+            appliance["nickName"],
+            list(coordinator.device.settings.keys()),
+        )
+        
         for key, parameter in coordinator.device.settings.items():
             if not isinstance(parameter, HonParameterRange):
                 continue
