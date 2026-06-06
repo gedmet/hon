@@ -31,6 +31,18 @@ divider = 1.0
 
 _LOGGER = logging.getLogger(__name__)
 
+AW_MODE_MAP = {
+    "0": "Auto",
+    "1": "Cooling",
+    "2": "Heating",
+    "3": "DHW",
+    "4": "Pool",
+    "5": "Heating + Pool",
+    "6": "Auto + DHW",
+    "7": "Cooling + DHW",
+    "8": "Heating + DHW",
+}
+
 async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities) -> None:
 
     hon = hass.data[DOMAIN][entry.unique_id]
@@ -233,7 +245,8 @@ class HonBaseMode(HonBaseSensorEntity):
     def coordinator_update(self):
         mode = self._device.get("machMode")
         self._attr_native_value = f"{mode}"
-
+        self._attr_native_value = AW_MODE_MAP.get(mode, mode)
+        
 
 class HonBaseProgramName(HonBaseSensorEntity):
     def __init__(self, hass, coordinator, entry, appliance) -> None:
