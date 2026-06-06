@@ -304,6 +304,34 @@ class HonDevice(CoordinatorEntity):
             commands.pop(item)
 
         for command, attr in commands.items():
+
+            # AW heat pump settings are nested under settings/setParameters
+            if (
+                command == "settings"
+                and isinstance(attr, dict)
+                and "setParameters" in attr
+            ):
+                self._commands[command] = HonCommand(
+                    command,
+                    attr["setParameters"],
+                    self._hon,
+                    self,
+                )
+                continue
+
+            self._commands[command] = HonCommand(
+                command,
+                attr,
+                self._hon,
+                self,
+            )
+
+            if command == "settings":
+                _LOGGER.error(
+                    "SETTINGS_KEYS_AFTER_FIX=%s",
+                    list(self._commands[command].settings.keys())
+                )
+            
             if "parameters" in attr:
                 self._commands[command] = HonCommand(command, attr, self._hon, self)
             if "setParameters" in attr and "parameters" in attr[list(attr)[0]]:
