@@ -37,8 +37,6 @@ async def async_setup_entry(hass, entry, async_add_entities) -> None:
 
         for key, parameter in coordinator.device.settings.items():
 
-        for key, parameter in coordinator.device.settings.items():
-
             _LOGGER.warning(
                 "SETTING %s TYPE=%s VALUES=%s",
             key,
@@ -48,6 +46,7 @@ async def async_setup_entry(hass, entry, async_add_entities) -> None:
              
             if not isinstance(parameter, (HonParameterEnum, HonParameterProgram)):
                 continue
+                
             if key.startswith("settings.") and set(parameter.values) == {"0", "1"}:
                 continue
 
