@@ -287,6 +287,12 @@ class HonDevice(CoordinatorEntity):
 
     async def load_commands(self):
         commands = await self._hon.load_commands(self._appliance)
+
+        _LOGGER.warning(
+            "RAW COMMANDS FOR %s:\n%s",
+            self._name,
+            commands,
+        )
     
         try:
             self._appliance_model = commands.pop("applianceModel")
