@@ -36,6 +36,16 @@ async def async_setup_entry(hass, entry, async_add_entities) -> None:
         coordinator = await hon.async_get_coordinator(appliance)
 
         for key, parameter in coordinator.device.settings.items():
+
+        for key, parameter in coordinator.device.settings.items():
+
+            _LOGGER.warning(
+                "SETTING %s TYPE=%s VALUES=%s",
+            key,
+            type(parameter).__name__,
+            getattr(parameter, "values", None),
+            )
+             
             if not isinstance(parameter, (HonParameterEnum, HonParameterProgram)):
                 continue
             if key.startswith("settings.") and set(parameter.values) == {"0", "1"}:
