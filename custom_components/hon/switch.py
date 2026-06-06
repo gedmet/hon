@@ -138,6 +138,42 @@ async def async_setup_entry(hass, entry: ConfigEntry, async_add_entities) -> Non
             appliances.extend([HonSwitchEntity(hass, coordinator, entry, appliance, description)])
             await coordinator.async_request_refresh()
 
+        AW_SWITCHES = {
+            "turboMode": ("Turbo Mode", "mdi:car-turbocharger"),
+            "holidayMode": ("Holiday Mode", "mdi:palm-tree"),
+            "quietMode1": ("Quiet Mode 1", "mdi:volume-low"),
+            "quietMode2": ("Quiet Mode 2", "mdi:volume-off"),
+            "fastDhw": ("Fast DHW", "mdi:water-boiler"),
+            "allowCoolStatus": ("Cooling Enabled", "mdi:snowflake"),
+            "allowCoolStatusZ2": ("Zone 2 Cooling Enabled", "mdi:snowflake"),
+            "dhwPriorityStatus": ("DHW Priority", "mdi:water"),
+            "dhwTankHeaterStatus": ("Tank Heater", "mdi:heating-coil"),
+            "onOffStatus": ("Power", "mdi:power"),
+            "sterilizationMode": ("Sterilization", "mdi:bacteria"),
+        }
+
+        for key, (name, icon) in AW_SWITCHES.items():
+            if (("settings" in device.commands)
+                and (device.get(key, "N/A") != "N/A")):
+
+                description = HonSwitchEntityDescription(
+                    key=key,
+                    name=name,
+                    icon=icon,
+                    translation_key=key.lower(),
+        )
+
+        appliances.append(
+            HonSwitchEntity(
+                hass,
+                coordinator,
+                entry,
+                appliance,
+                description,
+            )
+        )
+    
+
 
     async_add_entities(appliances)
 
